@@ -63,11 +63,7 @@ class AVL {
   int get_height(Node* x) { return x != nullptr ? x->height : 0; }
 
   void update_height(Node* x) {
-    if (x == nullptr) {
-      return;
-    }
-    update_height(x->left);
-    update_height(x->right);
+    assert(x != nullptr);
     const int l_height = get_height(x->left);
     const int r_height = get_height(x->right);
     x->height = std::max(l_height, r_height) + 1;
@@ -210,7 +206,7 @@ class AVL {
         return right_rotate(x);
 
       } else {
-        // right heavy or balance.
+        // right heavy.
         return left_right_rotate(x);
       }
 
@@ -226,7 +222,7 @@ class AVL {
         return left_rotate(x);
 
       } else {
-        // left heavy or balance
+        // left heavy.
         return right_left_rotate(x);
       }
     }

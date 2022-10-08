@@ -11,8 +11,7 @@ class AVL {
     Node* left{nullptr};
     Node* right{nullptr};
 
-    // a leaf node has height 1 while a nil node has height 0.
-    Node(const int val) : val{val}, height{1} {}
+    Node(const int val) : val{val}, height{0} {}
     void print() { std::cout << val << ' '; }
   };
 
@@ -60,14 +59,10 @@ class AVL {
   }
 
  private:
-  int get_height(Node* x) { return x != nullptr ? x->height : 0; }
+  int get_height(Node* x) { return x != nullptr ? x->height : -1; }
 
   void update_height(Node* x) {
-    if (x == nullptr) {
-      return;
-    }
-    update_height(x->left);
-    update_height(x->right);
+    assert(x != nullptr);
     const int l_height = get_height(x->left);
     const int r_height = get_height(x->right);
     x->height = std::max(l_height, r_height) + 1;
@@ -162,7 +157,6 @@ class AVL {
           // if at least one child is not null, replace x with it.
           *x = *y;
           free(y);
-
         } else {
           // both child are null.
           free(x);
@@ -199,34 +193,34 @@ class AVL {
   Node* rebalance(Node* x) {
     const int x_bf = get_bf(x);
     if (x_bf > 0) {
-      // left heavy.
+      // left heavy, insertion was in node x's left subtree.
       // we shall apply a right rotation to rebalance, but we have to first
       // examine the anchor node of the rotation, i.e. the left child.
       Node* y = x->left;
       const int y_bf = get_bf(y);
 
       if (y_bf > 0) {
-        // left heavy.
+        // left heavy, insertion was in node y's left subtree.
         return right_rotate(x);
 
       } else {
-        // right heavy or balance.
+        // right heavy, insertion was in node y's right subtree.
         return left_right_rotate(x);
       }
 
     } else {
-      // right heavy.
+      // right heavy, insertion was in node x's right subtree.
       // we shall apply a left rotation to rebalance, but we have to first
       // examine the anchor node of the rotation, i.e. the right child.
       Node* y = x->right;
       const int y_bf = get_bf(y);
 
       if (y_bf < 0) {
-        // right heavy.
+        // right heavy, insertion was in node y's right subtree.
         return left_rotate(x);
 
       } else {
-        // left heavy or balance
+        // left heavy, insertion was in node y's left subtree.
         return right_left_rotate(x);
       }
     }
@@ -352,7 +346,7 @@ int main() {
         }
     }
 
-    // avl_tree.Print();
+    avl_tree.Print();
   }
 
   return 0;
