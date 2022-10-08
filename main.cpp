@@ -205,8 +205,8 @@ class AVL {
       Node* y = x->left;
       const int y_bf = get_bf(y);
 
-      if (y_bf > 0) {
-        // left heavy.
+      if (y_bf >= 0) {
+        // left heavy or balance
         return right_rotate(x);
 
       } else {
@@ -221,12 +221,12 @@ class AVL {
       Node* y = x->right;
       const int y_bf = get_bf(y);
 
-      if (y_bf < 0) {
-        // right heavy.
+      if (y_bf <= 0) {
+        // right heavy or balance.
         return left_rotate(x);
 
       } else {
-        // left heavy or balance
+        // left heavy.
         return right_left_rotate(x);
       }
     }
